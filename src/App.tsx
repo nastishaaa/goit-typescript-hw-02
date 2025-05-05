@@ -80,7 +80,7 @@ function App() {
     const newPage: number = page + 1;
     setPage(newPage);
     try {
-      const data = await fetchImages(query, newPage, 12); 
+      const data: FetchResult = await fetchImages(query, newPage, 12); 
       setImage((prevImages) => [...prevImages, ...data.images]); 
       
       const totalPages: number = Math.ceil(data.totalHits / itemsPerPage); 
