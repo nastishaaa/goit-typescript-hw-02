@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import css from './SearchBar.module.css';
 import { toast } from "react-hot-toast";
 
@@ -7,21 +8,23 @@ interface Props {
 }
 
 export default function SearchBar({onSearch, onChange} : Props) {
+
+    const inputRef = useRef<HTMLInputElement>(null);
     
     const hendleSubmit = (ev: React.FormEvent<HTMLFormElement>): void => {
         ev.preventDefault();
+        
         const form: HTMLFormElement = ev.currentTarget;
-        const imgInput  = form.elements.namedItem("img") as HTMLInputElement;
-        const image = imgInput.value;
-        if (image.trim() === "") {
+        const value = inputRef.current?.value.trim();
+
+        if (!value || value === "") {
             toast.error("Input cannot be empty!", {
                 position: "top-right",
             });
             
             return;
         }
-    
-        onSearch(image);
+        onSearch(value);
         form.reset();
     }
 
@@ -29,6 +32,7 @@ export default function SearchBar({onSearch, onChange} : Props) {
         <header>
             <form className={css.form} onSubmit={hendleSubmit}>
             <input className={css.input}
+                ref={inputRef}
                 autoComplete="off"
                 name="img"
                 id="img"
